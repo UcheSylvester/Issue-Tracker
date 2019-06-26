@@ -28,8 +28,8 @@ function fetchIssues() {
                 <span class="glyphicon glyphhicon-time"></span>${assignedTo} 
             </p>
 
-            <a href="#" class="btn btn-warning" onclick="setStatusClosed(/${id}/)">Close</a>
-            <a href="#" class="btn btn-danger" onclick="deleteIssue(/${id}/)">Delete</a>
+            <a href="#" class="btn btn-warning" onclick="setStatusClosed('${id}')">Close</a>
+            <a href="#" class="btn btn-danger" onclick="deleteIssue('${id}')">Delete</a>
 
         </div>`
     })
@@ -86,6 +86,18 @@ function saveIssue(e) {
     
 }
 
-form.addEventListener('submit', saveIssue)
+function setStatusClosed(id) {
+    const issues = JSON.parse(localStorage.getItem('issues'));
+    console.log(issues)
+    // setting status to closed
+    issues.forEach(issue => {
+        if(issue.id == id) {
+            issue.status = 'closed';
+        }
+    })
 
-// onload="fetchIssues()"
+    localStorage.setItem('issues', JSON.stringify(issues))
+    fetchIssues()
+}
+
+form.addEventListener('submit', saveIssue)

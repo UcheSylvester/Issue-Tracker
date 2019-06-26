@@ -4,7 +4,7 @@ const form = document.getElementById('issueInputForm')
 const issuesList = document.getElementById('issuesList');
 
 function fetchIssues() {
-    console.log('fetching issues from localStoage')
+    // fetching issues from localStoage
     let issues = JSON.parse(localStorage.getItem('issues'));  // getting the issues from localStorage
 
     issuesList.innerHTML = '';  // clearing the list of issues on load
@@ -35,11 +35,11 @@ function fetchIssues() {
     })
 }
 
-
+// saving issues to localStorage
 function saveIssue(e) {
     e.preventDefault()
 
-    console.log('saving issues')  
+    // saving issues to localStorage  
     let issueId = chance.guid(),
         issueDescription = document.getElementById('issueDescInput').value,
         issueSeverity = document.getElementById('issueSeverityInput').value,
@@ -58,7 +58,7 @@ function saveIssue(e) {
     if(window.localStorage) {
         let issues = [];
 
-        if(localStorage.getItem('issues') == 'undefined') {
+        if(localStorage.getItem('issues') === null) {
 
             issues.push(issue);
             localStorage.setItem('issues', JSON.stringify(issues));
@@ -68,25 +68,17 @@ function saveIssue(e) {
             let issues = JSON.parse(localStorage.getItem('issues'));
             issues.push(issue);
             localStorage.setItem('issues', JSON.stringify(issues))
+            console.log(issues)
+
         }
-    } else {
-        console.warn('localStorage does not exist')
+    } 
+    // when localStorage isn't supported
+    else {
+        console.warn('localStorage does not exist');
+        issuesList.innerHTML = `<p>Will not save issues at this time. Local Storage no supported on this Browser, please upgrade to leatest version</p>`
 
     }
 
-
-
-
-    // if(localStorage.getItem('issues') === 'null') {
-    //     let issues = [];
-    //     issues.push(issue)
-    //     localStorage.setItem('issues', JSON.stringify(issues))
-    // } 
-    // else {
-    //     let issues = JSON.parse(localStorage.getItem('issues'));
-    //     issues.push(issue);
-    //     localStorage.setItem('issues', JSON.stringify(issues))
-    // }
 
     form.reset();
 

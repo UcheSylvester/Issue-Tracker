@@ -2,6 +2,7 @@ console.log('working...')
 
 const form = document.getElementById('issueInputForm')
 const issuesList = document.getElementById('issuesList');
+const body = document.querySelector('body')
 
 function fetchIssues() {
     // fetching issues from localStoage
@@ -28,7 +29,7 @@ function fetchIssues() {
                 <span class="glyphicon glyphhicon-time"></span>${assignedTo} 
             </p>
 
-            <a href="#" class="btn btn-warning" onclick="setStatusClosed('${id}')">Close</a>
+            <a href="#" class="btn btn-warning" onclick="setStatusClosed('${id}')" id="${id}">Close</a>
             <a href="#" class="btn btn-danger" onclick="deleteIssue('${id}')">Delete</a>
 
         </div>`
@@ -79,10 +80,12 @@ function saveIssue(e) {
 
     }
 
-
     form.reset();
 
     fetchIssues();
+
+    e.preventDefault()
+
     
 }
 
@@ -93,11 +96,33 @@ function setStatusClosed(id) {
     issues.forEach(issue => {
         if(issue.id == id) {
             issue.status = 'closed';
+
+            const closeButton = document.getElementById(`${id}`)
+            closeButton.classList.add('closed');
+            console.log(closeButton.classList)
+
         }
     })
 
     localStorage.setItem('issues', JSON.stringify(issues))
+    
+    fetchIssues()
+}
+
+function deleteIssue(id) {
+    const issues = JSON.parse(localStorage.getItem('issues'));
+
+    issues.forEach((issue, index, issues) => {
+        if(issue.id == id) {
+            issues.splice(index, 1)
+        }
+    })
+
+    localStorage.setItem('issues', JSON.stringify(issues));
+
     fetchIssues()
 }
 
 form.addEventListener('submit', saveIssue)
+
+// body.addEventListener('DOMContentLoaded', fetchIssues)
